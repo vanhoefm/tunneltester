@@ -71,7 +71,7 @@ You can execute the following commands to initialize the Python environment to e
 
 	python3 -m venv venv
 	source venv/bin/activate
-	pip install wheel scapy==2.4.3
+	pip install wheel scapy==2.6.1
 
 You can then load this Python environment as root and execute the script:
 
