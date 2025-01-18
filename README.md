@@ -3,13 +3,15 @@
 <a id="id-intro"></a>
 ## [1. Introduction](#id-intro)
 
-This repository will contain scripts to test whether hosts/servers accept unauthenticated tunneling packets. In particular, it can test whether a host accepts IPIP, IP6IP6, GRE, GRE6, 4in6, and 6in4 packets using various scanning methods. A high-level description of the resulting attacks can be found below, and a detailed description and evaluation of all attacks can be found in our [USENIX Security '25 paper](https://papers.mathyvanhoef.com/usenix2025-tunnels.pdf).
+This repository will contain scripts to test whether hosts/servers accept unauthenticated tunneling packets. In particular, it can test whether a host accepts IPIP, IP6IP6, GRE, GRE6, 4in6, and 6in4 packets using various scanning methods. A high-level description of the resulting attacks can be found below, and a detailed description and evaluation of all attacks can be found in our [USENIX Security '25 paper](https://papers.mathyvanhoef.com/usenix2025-tunnels.pdf). Additional information can also be found at the following websites:
 
-**NOTE: To prevent abuse, this scanning script is not yet publicly available. Only the README of the script is available. Please contact [Angelos Beitis](https://www.kuleuven.be/wieiswie/en/person/00165395) and [Mathy Vanhoef](https://www.kuleuven.be/wieiswie/en/person/00086006) to get access to the actual scanning scripts. We can also provide Z-Map modules to scan multiple hosts at once.**
+* [YouTube video that summarizes of our findings](https://youtu.be/eFZsM3khrSk?t=8).
+* [Results of daily Shadowserver scans](https://dashboard.shadowserver.org/statistics/combined/map/?map_type=std&day=2025-01-14&source=ip_tunnel&source=ip_tunnel6&geo=all&data_set=count&scale=log): we collaborated with the Shadowserver Foundation to perform daily scans for vulnerable tunneling hosts. If you possess your own IP ranges, you can register with Shadowserver to get notifications of vulnerable hosts. Note that Shadowserver is not yet using all the scan methods that we employed during our own research, those will still be added later.
+* [Article by Top10vpn](https://www.top10vpn.com/research/tunneling-protocol-vulnerability/) that summarises our findings with extra details on affected VPN servers.
+* [Vulnerability Note VU#199397: Insecure Implementation of Tunneling Protocols (GRE/IPIP/4in6/6in4)](https://kb.cert.org/vuls/id/199397). See also the assigned [CVE identifiers described below](#id-summary-cves).
 
-For advice on how to mitigate the resulting attacks, see Section 6 in [our paper](https://papers.mathyvanhoef.com/usenix2025-tunnels.pdf).
+**NOTE: To prevent abuse, this scanning script is not yet publicly available. Only the README of the script is available. Please contact us to get access to the actual scanning scripts. We can also provide Z-Map modules to scan multiple hosts at once.**
 
-The vulnerabilities were reported to CERT/CC on May 16, 2024, and are being tracked using the identifier VU#199397 and using the [CVE identifiers described below](#id-summary-cves). We have also collaborated with the [Shadowserver Foundation](https://www.shadowserver.org/) to better reach affected organizations, and they are now performing periodic scans for vulnerable tunneling hosts.
 
 <a id="id-summary"></a>
 ## [2. Vulnerability Summary](#id-summary)
