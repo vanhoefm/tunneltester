@@ -3,19 +3,42 @@
 <a id="id-intro"></a>
 ## [1. Introduction](#id-intro)
 
+In our [USENIX Security '25 paper](https://papers.mathyvanhoef.com/usenix2025-tunnels.pdf) we identified over 4 million vulnerable Internet servers that can be abused to attack any website or service on the Internet. These vulnerable servers, called tunneling hosts, are misconfigured and will wrongly forward any received Internet traffic to an attacker-chosen destination. A malicious individual can abuse this to hide their identity while attacking any website or service on the Internet: malicious traffic received by the victim will appear to be sent by the vulnerable tunneling host, effectively hiding the attacker's identity. More problematic, an attacker can also exploit these vulnerable tunneling hosts to spoof their IP address, making it look like their traffic is coming from somewhere else entirely. This ability is similar to sending a letter with a fake return address, which enables a malicious individual to perform anonymous Internet attacks.
+
+We scanned the full Internet using 7 different methods to study the prevalence of vulnerable tunnelling hosts. In total, this revealed more than 4 million vulnerable tunneling hosts. We also investigated where these vulnerable hosts are located. This indicated that various organizations contained vulnerable hosts, most notably this included the Content Delivery Network of Facebook and Tencent’s cloud services. Additionally, the home routers of the French Free ISP were also vulnerable and a sizable number of vulnerable hosts were associated with the Belgian Telenet ISP. These organizations have meanwhile been contacted and rectified the issue. Telenet indicated that it was their customers that were affected.
+
+You can watch a 3-minute video where our findings are visually explained on [YouTube](https://youtu.be/eFZsM3khrSk?t=8):
+
+[![IMAGE ALT TEXT HERE](img/video-preview.png)](https://youtu.be/eFZsM3khrSk?t=8)
+
+The [corresponding research paper](https://papers.mathyvanhoef.com/usenix2025-tunnels.pdf) will be presented at the [USENIX Security '25 conference](https://www.usenix.org/conference/usenixsecurity25). In our paper, we also explain and demonstrate new Denial-of-Service (DoS) attacks that exploit these vulnerable hosts. These kinds of attacks overwhelm a target with malicious traffic, causing the website or Internet service to no longer be responsive. Our first novel DoS attack, called the "Ping-Pong" attack, involves overwhelming a target by looping packets between vulnerable tunneling hosts to amplify traffic. The second attack, called Tunnelled-Temporal Lensing (TuTL), concentrates traffic in time, causing a surge of traffic to arrive at the victim all at once. Finally, the researchers found that the vulnerable hosts can be used for Economic Denial of Sustainability (EDoS) attacks by forcing the hosts to consume large amounts of bandwidth, thereby incurring unexpected financial costs to the victim.
+
+Furthermore, there are indications that the vulnerable hosts may also be abused to access to an organization’s private network, potentially revealing sensitive information. This is because normally the vulnerable tunneling hosts are used to link two physically seperate networks. Unfortunately, many of these tunneling protocols do not contain protections such as authentication or encryption, which is a core root cause of why these vulnerable hosts can be discovered and subsequently exploited by a malicious individual.
+
+For further information, feel freel to also listen to our [17-minute generated podcast](https://people.cs.kuleuven.be/~mathy.vanhoef/tunneling/podcast.mp3) that explains our findings in a fun and relatable manner:
+
+[![IMAGE ALT TEXT HERE](img/podcast-preview.png)](https://people.cs.kuleuven.be/~mathy.vanhoef/tunneling/podcast.mp3)
+
+To mitigate the vulnerability, several defences exist, including filtering traffic based on trusted sources, utilising deep packet inspection, and implementing source address filtering. We hope our results will motivate and guide administrators to secure tunnelling hosts better.
+
+
+<a id="id-resources"></a>
+## [2. Overview of Resources](#id-resources)
+
 This repository will contain scripts to test whether hosts/servers accept unauthenticated tunneling packets. In particular, it can test whether a host accepts IPIP, IP6IP6, GRE, GRE6, 4in6, and 6in4 packets using various scanning methods. A high-level description of the resulting attacks can be found below, and a detailed description and evaluation of all attacks can be found in our [USENIX Security '25 paper](https://papers.mathyvanhoef.com/usenix2025-tunnels.pdf). Additional information can also be found at the following websites:
 
-* [YouTube video that summarizes of our findings](https://youtu.be/eFZsM3khrSk?t=8).
+* [Article by Top10vpn](https://www.top10vpn.com/research/tunneling-protocol-vulnerability/) that summarises our findings **with extra details on affected VPN servers**.
 * [Results of daily Shadowserver scans](https://dashboard.shadowserver.org/statistics/combined/map/?map_type=std&day=2025-01-14&source=ip_tunnel&source=ip_tunnel6&geo=all&data_set=count&scale=log): we collaborated with the Shadowserver Foundation to perform daily scans for vulnerable tunneling hosts. If you possess your own IP ranges, you can register with Shadowserver to get notifications of vulnerable hosts. Note that Shadowserver is not yet using all the scan methods that we employed during our own research, those will still be added later.
-* [Article by Top10vpn](https://www.top10vpn.com/research/tunneling-protocol-vulnerability/) that summarises our findings with extra details on affected VPN servers.
+* [Haunted by Legacy: Discovering and Exploiting Vulnerable Tunnelling Hosts](https://papers.mathyvanhoef.com/usenix2025-tunnels.pdf): our academic USENIX Security '25 paper that describes the findings in detail.
 * [Vulnerability Note VU#199397: Insecure Implementation of Tunneling Protocols (GRE/IPIP/4in6/6in4)](https://kb.cert.org/vuls/id/199397). See also the assigned [CVE identifiers described below](#id-summary-cves).
-* [Auto-generated Postcast (17:27)](http://people.cs.kuleuven.be/~mathy.vanhoef/tunneling/podcast.mp3): this was manually edited by removing some unrelated information on defences.
+* [Youtube Video](https://youtu.be/eFZsM3khrSk?t=8): explanation and illustrations of the findings.
+* [Postcast (17:27)](http://people.cs.kuleuven.be/~mathy.vanhoef/tunneling/podcast.mp3): this auto-generated podcast was manually edited by removing some unrelated information on defences.
 
 **NOTE: To prevent abuse, this scanning script is not yet publicly available. Only the README of the script is available. Please contact us to get access to the actual scanning scripts. We can also provide Z-Map modules to scan multiple hosts at once.**
 
 
 <a id="id-summary"></a>
-## [2. Vulnerability Summary](#id-summary)
+## [3. Technical Details](#id-summary)
 
 ![Alt text](attack_overview.png)
 
@@ -32,7 +55,7 @@ The vulnerable host at `1.0.0.1` will receive the IP/GRE packet and then process
 
 
 <a id="id-summary-scans"></a>
-### [2.1 Scanning Methods](#id-summary-scans)
+### [3.1 Scanning Methods](#id-summary-scans)
 
 To detect vulnerable hosts, we scanned the IPv4 and IPv6 Internet using three main methods. These methods are further explained in the indicated sections of our paper:
 
@@ -48,7 +71,7 @@ For the 6in4 scans, where we send a tunneling packet to an IPv4 host with as inn
 
 
 <a id="id-summary-impact"></a>
-### [2.2 Impact Summary](#id-summary-impact)
+### [3.2 Impact Summary](#id-summary-impact)
 
 - **Denial-of-Service**: An attack that is always possible is a Denial-of-Service attack by recursively encapsulating tunneling packets and sending this constructed packet to a vulnerable host. The vulnerable host will then recursively keep processing the encapsulated tunneling packets until the last nested packet is reached. This implies that sending a single packet will result in substantial processing time on the vulnerable host. In terms of CPU usage on the vulnerable host, this can result in an amplification factor of 70x when performing a DoS attack, and even higher when combined with IP fragmentation. Depending on the behaviour of the vulnerable tunneling host, other DoS attacks may also be possible, such as a Tunneled-Temporal Lensing Attack or Economic DoS attack. See our draft paper for details.
 
@@ -58,7 +81,7 @@ For the 6in4 scans, where we send a tunneling packet to an IPv4 host with as inn
 
 
 <a id="id-summary-cves"></a>
-### [2.3 Assigned CVE Identifiers](#id-summary-cves)
+### [3.3 Assigned CVE Identifiers](#id-summary-cves)
 
 - [CVE-2020-10136](https://nvd.nist.gov/vuln/detail/CVE-2020-10136): IPv4-in-IPv4 (IPIP) protocol (RFC2003).
 - [CVE-2024-7595](https://nvd.nist.gov/vuln/detail/CVE-2024-7595): GRE and GRE6 (RFC2784).
@@ -68,7 +91,7 @@ For the 6in4 scans, where we send a tunneling packet to an IPv4 host with as inn
 
 
 <a id="id-prerequisites"></a>
-## [3. Tool Prerequisites](#id-prerequisites)
+## [4. Tool Prerequisites](#id-prerequisites)
 
 You can execute the following commands to initialize the Python environment to execute the script. We tested these commands on Ubuntu 24.04:
 
@@ -84,7 +107,7 @@ You can then load this Python environment as root and execute the script:
 
 
 <a id="id-reproduce"></a>
-## [4. Steps to Reproduce](#id-reproduce)
+## [5. Steps to Reproduce](#id-reproduce)
 
 After the prerequisite steps, you can execute the following command to test IPv4-capable hosts:
 
@@ -110,7 +133,7 @@ For each performed test, the script will output `SAFE` if no vulnerability was d
 
 
 <a id="id-advanced"></a>
-## [5. Advanced Usage](#id-advanced)
+## [6. Advanced Usage](#id-advanced)
 
 By default, the script will use the IP address associated to the given interface as the source address in transmitted packets. To use a different source address, or explicitly set the IP address in case it does not get detected properly, you can use:
 
@@ -134,11 +157,12 @@ When running the script on an AWS EC2 server, you need to explicitly provide the
 
 
 <a id="id-troubleshooting"></a>
-## [6. Troubleshooting](#id-troubleshooting)
+## [7. Troubleshooting](#id-troubleshooting)
 
 - Ensure you are injecting packets on the correct interface!
 
-- When you are testing your own vulnerable server, ensure that the `accept_local` and `ip_forwarding` sysctl's for both IPv4/6 are set. Otherwise the host may not be vulnerable to (all) attacks.
+- When you are testing your own vulnerable server, ensure that the `accept_local` and `ip_forwarding` sysctls for both IPv4/6 are set. Otherwise, the host may not be vulnerable to (all) attacks.
 
 - With tcpdump you can use the filter `"proto 4 or proto gre or proto 41"` to capture the packets that the scanning tool is transmitting (this will not show possible replies).
 
+- When you are testing whether open tunneling hosts also forward non-ICMP traffic, remember that the inner packet must have an IP packet. So in Python/Scapy you have to construct a packet of the form IP()/GRE()/IP()/UDP(). In the past, some have forgotten the inner IP header when testing this.
