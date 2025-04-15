@@ -180,3 +180,8 @@ When running the script on an AWS EC2 server, you need to explicitly provide the
 - With tcpdump you can use the filter `"proto 4 or proto gre or proto 41"` to capture the packets that the scanning tool is transmitting (this will not show possible replies).
 
 - When you are testing whether open tunneling hosts also forward non-ICMP traffic, remember that the inner packet must have an IP packet. So in Python/Scapy you have to construct a packet of the form IP()/GRE()/IP()/UDP(). In the past, some have forgotten the inner IP header when testing this.
+
+<a id="id-acknowledgements"></a>
+## [Acknowledgements](#id-acknowledgements)
+
+To investigate the properties of the vulnerable hosts during the research and disclosure, we made use of the [Censys Dataset](https://docs.censys.com/docs/research-access-to-censys-data#/). See their paper [A Search Engine Backed by Internet-Wide Scanning](https://dl.acm.org/doi/10.1145/2810103.2813703) by *Zakir Durumeric, David Adrian, Ariana Mirian, Michael Bailey, J. Alex Halderman* published at ACM CCS '15.
