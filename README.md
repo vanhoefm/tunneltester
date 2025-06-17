@@ -34,8 +34,6 @@ This repository will contain scripts to test whether hosts/servers accept unauth
 * [Youtube Video](https://youtu.be/eFZsM3khrSk?t=8): explanation and illustrations of the findings.
 * [Postcast (17:27)](http://people.cs.kuleuven.be/~mathy.vanhoef/tunneling/podcast.mp3): this auto-generated podcast was manually edited by removing some unrelated information on defences.
 
-**NOTE: To prevent abuse, this scanning script is not yet publicly available. Only the README of the script is available. Please contact us to get access to the actual scanning scripts. We can also provide Z-Map modules to scan multiple hosts at once.**
-
 <a id="id-shadowserver"></a>
 ## [2.1 Shadowserver Scans](#id-shadowserver)
 
